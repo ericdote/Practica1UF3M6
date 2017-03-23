@@ -7,6 +7,8 @@ package m06uf3_exist;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.xquery.XQConnection;
 import javax.xml.xquery.XQException;
 import javax.xml.xquery.XQExpression;
@@ -45,21 +47,21 @@ public class Consultes {
     }
 
     public Node cercarNom(String nom) {
-        Node libro = null;
+        Node planta = null;
         try {
             xqe = con.createExpression();
             String xq = "for $b in doc('/plantas/plantes.xml')"
-                    + "//libro where every $a in $b/titulo satisfies ($a = '" + nom + "') return $b";
+                    + "//PLANT where every $a in $b/COMMON satisfies ($a = '" + nom + "') return $b";
 
             XQResultSequence rs = xqe.executeQuery(xq);
             rs.next();
-            libro = rs.getItem().getNode();
+            planta = rs.getItem().getNode();
         } catch (XQException ex) {
             System.out.println(ex.getMessage());
         }
-        return libro;
+        return planta;
     }
-    
+
     public void afegirPlanta(String codigo, String categoria, String fecha_pub, String titulo, String ventas) {
         try {
             xqe = con.createExpression();
@@ -77,7 +79,7 @@ public class Consultes {
             System.out.println(ex.getMessage());
         }
     }
-    
+
     public void afegirAtribut(String atributo, String valor) {
         try {
             xqe = con.createExpression();
@@ -87,7 +89,7 @@ public class Consultes {
             System.out.println(ex.getMessage());
         }
     }
-    
+
     public void afegirEtiqueta(String etiqueta, String valor) {
         try {
             xqe = con.createExpression();
@@ -97,7 +99,7 @@ public class Consultes {
             System.out.println(ex.getMessage());
         }
     }
-    
+
     public void modificarPreuNode(String codigo, String precio) {
         try {
             xqe = con.createExpression();
@@ -107,9 +109,9 @@ public class Consultes {
             System.out.println(ex.getMessage());
         }
     }
-    
-    public void eliminarLlibre(String codigo){
-        
+
+    public void eliminarLlibre(String codigo) {
+
         try {
             xqe = con.createExpression();
             String xq = "update delete doc('/plantas/plantes.xml')//libro[@codigo='" + codigo + "']";
@@ -118,7 +120,7 @@ public class Consultes {
             System.out.println(ex.getMessage());
         }
     }
-    
+
     public void eliminarEtiqueta(String etiqueta) {
         try {
             xqe = con.createExpression();
@@ -129,7 +131,7 @@ public class Consultes {
         }
     }
 
-    void eliminarAtribut(String atributo) {
+    public void eliminarAtribut(String atributo) {
         try {
             xqe = con.createExpression();
             String xq = "update delete doc('/plantas/plantes.xml')//libro/@" + atributo;
@@ -137,6 +139,28 @@ public class Consultes {
         } catch (XQException ex) {
             System.out.println(ex.getMessage());
         }
+    }
+
+    public void traduirEtiquetas(String[] original, String[] traducido) {
+        try {
+            xqe = con.createExpression();
+            for (int i = 0; i < original.length; i++) {
+                String xq = "update rename doc('/plantas/plantes.xml')//PLANT/" + original[i] + " as '" + traducido[i] + "'";
+                xqe.executeCommand(xq);
+            }
+        } catch (XQException e) {
+        }
+    }
+
+    public void eliminarDolar() {
+        try {
+            xqe = con.createExpression();
+            String xq = "for $b in doc('/plantas/plantes.xml')//PLANT/PRICE return update value $b with substring($b,2)";
+            xqe.executeCommand(xq);
+        } catch (XQException ex) {
+            Logger.getLogger(Consultes.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
 }

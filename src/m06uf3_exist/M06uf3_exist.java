@@ -2,6 +2,7 @@ package m06uf3_exist;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.xml.xquery.XQConnection;
 import javax.xml.xquery.XQDataSource;
 import javax.xml.xquery.XQException;
@@ -19,7 +20,7 @@ public class M06uf3_exist {
         }
     }
 
-    private static void imprimiPlantas(Node planta) {
+    private static void imprimirPlanta(Node planta) {
         if (planta != null) {
             NamedNodeMap attributes = planta.getAttributes();
 
@@ -32,41 +33,19 @@ public class M06uf3_exist {
     }
 
     public static void main(String[] args) {
+        String[] etiquetas = {"COMMON", "BOTANICAL", "ZONE", "LIGHT", "PRICE", "AVAILABILITY"};
+        String[] etiTradu = {"NOMBRE", "PLANTA", "ZONA", "LUZ", "PRECIO", "DISPONIBILIDAD"};
 
         ConfigConnexio cc = new ConfigConnexio();
         Consultes cs = new Consultes(cc.getCon());
 
-        //Llibre
-//        String codigo = "16-205";
-//        String categoria = "BBDD";
-//        String fecha_pub = "2017-03-19";
-//        String titulo = "BBDD XML con eXist";
-//        String ventas = "7";
-//
-//        String codigo2 = "16-041";
-//        String precio = "50€";
-//        String etiqueta = "preu";
-//        String atributo = "disponible";
-//        String valor = "S";
-//        String valor1 = "0€";
+//        cs.traduirEtiquetas(etiquetas, etiTradu);
+//        cs.eliminarDolar();
+//        imprimirPlantas(cs.obtenirPlantes());    
+//        imprimirPlanta(cs.cercarNom(JOptionPane.showInputDialog("Introdueix un nom de la planta")));
 
-//        cs.afegirLlibre(codigo, categoria, fecha_pub, titulo, ventas);
-//        cs.afegirAtribut(atributo, valor);
-//
-//        cs.afegirEtiqueta(etiqueta, valor1);
-//        cs.modificarPreuNode(codigo2, precio);
+
         
-        //LLISTAR LLIBRES
-        //imprimirLibros(cs.obtenirLlibres());
-
-        //CERCAR PER TITOL
-//        imprimiPlantas(cs.cercarNom("instant html"));
-
-//        cs.eliminarEtiqueta(etiqueta);
-//        cs.eliminarAtribut(atributo);
-//        cs.eliminarLlibre(codigo);
-        imprimirPlantas(cs.obtenirPlantes());
-
     }
 
 }
