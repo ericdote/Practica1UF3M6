@@ -43,9 +43,10 @@ public class M06uf3_exist {
 //        cs.eliminarDolar();
 //        imprimirPlantas(cs.obtenirPlantes());    
 //        imprimirPlanta(cs.cercarNom(JOptionPane.showInputDialog("Introdueix un nom de la planta")));
+//        cs.afegirPlanta("Planta", "Planta", "HONDA", "OVSUCRO", "2.35", "05478");
+//cs.afegirAtribut("CODIGO", "1");
+        cs.afegirEtiqueta("MARCOS", "TONTO", "4");
 
-
-        
     }
 
 }

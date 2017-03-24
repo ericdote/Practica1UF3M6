@@ -34,7 +34,7 @@ public class Consultes {
         List<Node> plantas = new ArrayList<>();
         try {
             xqe = con.createExpression();
-            String xq = "for $b in doc ('/plantas/plantes.xml')//PLANT return $b/COMMON";
+            String xq = "for $b in doc ('/plantas/plantes.xml')//PLANT return $b";
 
             XQResultSequence rs = xqe.executeQuery(xq);
             while (rs.next()) {
@@ -62,18 +62,19 @@ public class Consultes {
         return planta;
     }
 
-    public void afegirPlanta(String codigo, String categoria, String fecha_pub, String titulo, String ventas) {
+    public void afegirPlanta(String common, String botanical, String zone, String light, String price, String availabilitiy) {
         try {
             xqe = con.createExpression();
             String xq = "update insert "
-                    + "    <libro codigo='" + codigo + "'>"
-                    + "        <categoria>" + categoria + "</categoria>"
-                    + "        <fecha_pub>" + fecha_pub + "</fecha_pub>"
-                    + "        <titulo>" + titulo + "</titulo>"
-                    + "        <ventas>" + ventas + "</ventas>"
-                    + "    </libro>\n"
-                    + "into doc('/m06uf3/libros.xml')/listadelibros";
-
+                    + "    <PLANT>"
+                    + "        <COMMON>" + common + "</COMMON>"
+                    + "        <BOTANICAL>" + botanical + "</BOTANICAL>"
+                    + "        <ZONE>" + zone + "</ZONE>"
+                    + "        <LIGHT>" + light + "</LIGHT>"
+                    + "        <PRICE>" + price + "</PRICE>"
+                    + "        <AVAILABILITY>" + availabilitiy + "</AVAILABILITY>"
+                    + "    </PLANT>\n"
+                    + "preceding doc('/plantas/plantes.xml')//PLANT[1]";
             xqe.executeCommand(xq);
         } catch (XQException ex) {
             System.out.println(ex.getMessage());
@@ -83,18 +84,19 @@ public class Consultes {
     public void afegirAtribut(String atributo, String valor) {
         try {
             xqe = con.createExpression();
-            String xq = "update insert attribute " + atributo + " {'" + valor + "'} into doc('/m06uf3/libros.xml')//libro";
+            String xq = "update insert attribute " + atributo + " {'" + valor + "'} into doc('/plantas/plantes.xml')//PLANT";
             xqe.executeCommand(xq);
         } catch (XQException ex) {
             System.out.println(ex.getMessage());
         }
     }
 
-    public void afegirEtiqueta(String etiqueta, String valor) {
+    public void afegirEtiqueta(String etiqueta, String valor, String zona) {
         try {
             xqe = con.createExpression();
-            String xq = "update insert <" + etiqueta + ">'" + valor + "'</" + etiqueta + "> into doc('/m06uf3/libros.xml')//libro";
+            String xq = "for $b in doc('/plantas/plantes.xml')//PLANT where every $a in $b/ZONE satisfies ($a='" + zona + "') return update insert <" + etiqueta.toUpperCase() + "> {'" + valor + "'} </" + etiqueta.toUpperCase() + "> into $b";
             xqe.executeCommand(xq);
+
         } catch (XQException ex) {
             System.out.println(ex.getMessage());
         }
@@ -103,7 +105,7 @@ public class Consultes {
     public void modificarPreuNode(String codigo, String precio) {
         try {
             xqe = con.createExpression();
-            String xq = "update value doc('/plantas/plantes.xml')//libro[@codigo='" + codigo + "']/preu with '" + precio + "'";
+            String xq = "update value doc('/plantas/plantes.xml')//libro[@codigo='" + codigo + "']/preu '" + precio + "'";
             xqe.executeCommand(xq);
         } catch (XQException ex) {
             System.out.println(ex.getMessage());
