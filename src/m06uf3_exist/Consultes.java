@@ -165,4 +165,40 @@ public class Consultes {
 
     }
 
+    public List<Node> obtenirPlantesPreu(double preuInferior, double preuSuperior) {
+        List<Node> plantas = new ArrayList<>();
+        try {
+            xqe = con.createExpression();
+            String xq = "for $b in doc ('/plantas/plantes.xml')//PLANT where every $a in $b/ZONE satisfies($a >= '"+ preuInferior + "' and $a <= '" + preuSuperior + "') return $b";
+
+            XQResultSequence rs = xqe.executeQuery(xq);
+            while (rs.next()) {
+                plantas.add(rs.getItem().getNode());
+            }
+        } catch (XQException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return plantas;
+    }
+    
+    public List<Node> obtenirPerZona(String zona){
+        List<Node> plantas = new ArrayList<>();
+        try {
+            xqe = con.createExpression();
+            String xq = "for $b in doc ('/plantas/plantes.xml')//PLANT where every $a in $b/ZONE satisfies($a = '"+ zona +"') return $b";
+
+            XQResultSequence rs = xqe.executeQuery(xq);
+            while (rs.next()) {
+                plantas.add(rs.getItem().getNode());
+            }
+        } catch (XQException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return plantas;
+    }
+    
+    public void modificarPreu (String nom){
+        
+    }  
+
 }
