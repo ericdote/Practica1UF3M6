@@ -29,7 +29,10 @@ public class Consultes {
     public Consultes(XQConnection con) {
         this.con = con;
     }
-
+    /**
+     * Obte una llista amb totes les plantes
+     * @return 
+     */
     public List<Node> obtenirPlantes() {
         List<Node> plantas = new ArrayList<>();
         try {
@@ -45,7 +48,11 @@ public class Consultes {
         }
         return plantas;
     }
-
+    /**
+     * Obte una planta pel seu nom
+     * @param nom
+     * @return 
+     */
     public Node cercarNom(String nom) {
         Node planta = null;
         try {
@@ -61,7 +68,15 @@ public class Consultes {
         }
         return planta;
     }
-
+    /**
+     * Afegeix una planta nova al XML a la primera posicio
+     * @param common
+     * @param botanical
+     * @param zone
+     * @param light
+     * @param price
+     * @param availabilitiy 
+     */
     public void afegirPlanta(String common, String botanical, String zone, String light, String price, String availabilitiy) {
         try {
             xqe = con.createExpression();
@@ -80,7 +95,11 @@ public class Consultes {
             System.out.println(ex.getMessage());
         }
     }
-
+    /**
+     * Afegeix un atribut amb un valor a totes les plantes
+     * @param atributo
+     * @param valor 
+     */
     public void afegirAtribut(String atributo, String valor) {
         try {
             xqe = con.createExpression();
@@ -90,7 +109,12 @@ public class Consultes {
             System.out.println(ex.getMessage());
         }
     }
-
+    /**
+     * Afegeix una etiqueta a unes plantes, les quals es filten per la zona
+     * @param etiqueta
+     * @param valor
+     * @param zona 
+     */
     public void afegirEtiqueta(String etiqueta, String valor, String zona) {
         try {
             xqe = con.createExpression();
@@ -102,47 +126,11 @@ public class Consultes {
         }
     }
 
-    public void modificarPreuNode(String codigo, String precio) {
-        try {
-            xqe = con.createExpression();
-            String xq = "update value doc('/plantas/plantes.xml')//libro[@codigo='" + codigo + "']/preu '" + precio + "'";
-            xqe.executeCommand(xq);
-        } catch (XQException ex) {
-            System.out.println(ex.getMessage());
-        }
-    }
-
-    public void eliminarLlibre(String codigo) {
-
-        try {
-            xqe = con.createExpression();
-            String xq = "update delete doc('/plantas/plantes.xml')//libro[@codigo='" + codigo + "']";
-            xqe.executeCommand(xq);
-        } catch (XQException ex) {
-            System.out.println(ex.getMessage());
-        }
-    }
-
-    public void eliminarEtiqueta(String etiqueta) {
-        try {
-            xqe = con.createExpression();
-            String xq = "update delete doc('/plantas/plantes.xml')//libro/" + etiqueta;
-            xqe.executeCommand(xq);
-        } catch (XQException ex) {
-            System.out.println(ex.getMessage());
-        }
-    }
-
-    public void eliminarAtribut(String atributo) {
-        try {
-            xqe = con.createExpression();
-            String xq = "update delete doc('/plantas/plantes.xml')//libro/@" + atributo;
-            xqe.executeCommand(xq);
-        } catch (XQException ex) {
-            System.out.println(ex.getMessage());
-        }
-    }
-
+    /**
+     * Tradueix el nom de les etiquetes, buscant primer el nom original de la etiqueta i després ho sustitueix per la seva traduccio
+     * @param original
+     * @param traducido 
+     */
     public void traduirEtiquetas(String[] original, String[] traducido) {
         try {
             xqe = con.createExpression();
@@ -153,7 +141,9 @@ public class Consultes {
         } catch (XQException e) {
         }
     }
-
+    /**
+     * Metode que busca tots els preus de les plantes i elimina el dolar de tots els preus
+     */
     public void eliminarDolar() {
         try {
             xqe = con.createExpression();
@@ -164,7 +154,12 @@ public class Consultes {
         }
 
     }
-
+    /**
+     * Obté totes les plantes per un rang de preus
+     * @param preuInferior
+     * @param preuSuperior
+     * @return 
+     */
     public List<Node> obtenirPlantesPreu(double preuInferior, double preuSuperior) {
         List<Node> plantas = new ArrayList<>();
         try {
@@ -180,7 +175,11 @@ public class Consultes {
         }
         return plantas;
     }
-    
+    /**
+     * Obte una llista de plantes per la zona com filtre
+     * @param zona
+     * @return 
+     */
     public List<Node> obtenirPerZona(String zona){
         List<Node> plantas = new ArrayList<>();
         try {
@@ -192,13 +191,36 @@ public class Consultes {
                 plantas.add(rs.getItem().getNode());
             }
         } catch (XQException ex) {
+            
             System.out.println(ex.getMessage());
         }
         return plantas;
     }
-    
-    public void modificarPreu (String nom){
-        
-    }  
+    /**
+     * Modifica el preu d'una planta pel seu nom
+     * @param nom
+     * @param preu 
+     */
+    public void modificarPreu (String nom, double preu){
+        try {
+            xqe = con.createExpression();
+            String xq = "for $b in doc('/plantas/plantes.xml')//PLANT where every $a in $b/COMMON satisfies($a = '" + nom + "') return update value $b/PRICE with " + preu;
+            xqe.executeCommand(xq);
+        } catch (XQException ex) {
+            Logger.getLogger(Consultes.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    } 
+    /**
+     * Elimina una planta pel seu nom
+     * @param nom 
+     */
+    public void eliminarPerNom(String nom){
+        try {
+            xqe = con.createExpression();
+            String xq = "for $b in doc('/plantas/plantes.xml')//PLANT where every $a in $b/COMMON satisfies($a = '" + nom + "') return update delete $b";
+            xqe.executeCommand(xq);
+        } catch (XQException e) {
+        }
+    }
 
 }

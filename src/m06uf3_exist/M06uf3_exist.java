@@ -38,7 +38,9 @@ public class M06uf3_exist {
         
         ConfigConnexio cc = new ConfigConnexio();
         Consultes cs = new Consultes(cc.getCon());
-
+/**
+ * Parte 1
+ */
 //        cs.traduirEtiquetas(etiquetas, etiTradu);
 //        cs.eliminarDolar();
 //        imprimirPlantas(cs.obtenirPlantes());    
@@ -48,7 +50,8 @@ public class M06uf3_exist {
 //        cs.afegirEtiqueta("MARCOS", "TONTO", "4");
 //        imprimirPlantas(cs.obtenirPlantesPreu(1, 3));
 //        imprimirPlantas(cs.obtenirPerZona("4"));
-        
+//        cs.modificarPreu("Bloodroot", 0);
+//        cs.eliminarPerNom("Bloodroot");
     }
     
 }
