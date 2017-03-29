@@ -18,15 +18,16 @@ import org.xmldb.api.base.XMLDBException;
  */
 public class MainClass {
 
-
-    
+    private static Consultas cc = new Consultas();
 
     public static void main(String[] args) {
-        Consultas cc = new Consultas();
-        
-        cc.nomColActu();
-        
-        
-    }
 
+//        cc.nomColActu();
+//        cc.nomPare();
+//        for (String element : cc.listarColection()) {
+//            System.out.println(element);
+//        }
+//        cc.crearCollecions("collectionNova");
+
+    }
 }
