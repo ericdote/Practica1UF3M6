@@ -20,7 +20,7 @@ public class MainClass {
 
     private static Consultas cc = new Consultas();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws XMLDBException {
 
 //        cc.nomColActu();
 //        cc.nomPare();
@@ -28,6 +28,7 @@ public class MainClass {
 //            System.out.println(element);
 //        }
 //        cc.crearCollecions("collectionNova");
-
+//        cc.eliminarCollecions("collectionNova");
+        cc.recursDinsDeCollection("plantas", "plantes.xml");
     }
 }
